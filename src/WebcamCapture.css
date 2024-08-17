@@ -1,0 +1,126 @@
+/* Container for the webcam capture component */
+.webcam-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  background-color: #fff;
+  margin: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Wrapper for video to allow positioning of grid overlay */
+.video-wrapper {
+  position: relative;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+/* Styling for the video element */
+.webcam-video {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+/* Grid overlay */
+.grid-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* Allow clicks to pass through */
+}
+
+/* Hide grid by default */
+.hidden {
+  display: none;
+}
+
+/* Vertical lines */
+.grid-overlay::before,
+.grid-overlay::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 2px;
+  height: 100%;
+  border-left: 2px dotted red;
+}
+
+.grid-overlay::before {
+  left: 33.33%; /* First vertical line */
+}
+
+.grid-overlay::after {
+  left: 66.66%; /* Second vertical line */
+}
+
+/* Horizontal lines */
+.grid-overlay > .horizontal-line-1,
+.grid-overlay > .horizontal-line-2 {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  border-top: 2px dotted red;
+}
+
+.grid-overlay > .horizontal-line-1 {
+  top: 33.33%; /* First horizontal line */
+}
+
+.grid-overlay > .horizontal-line-2 {
+  top: 66.66%; /* Second horizontal line */
+}
+
+/* Styling for the captured image */
+.captured-image {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+/* Container for centered buttons */
+.centered-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  gap: 20px; /* Adds space between buttons */
+}
+
+/* Styling for the buttons */
+.webcam-button,
+.next-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.webcam-button:hover {
+  background-color: #0056b3;
+}
+
+.next-button {
+  background-color: #28a745;
+}
+
+.next-button:hover {
+  background-color: #218838;
+}
+
+/* Canvas element is hidden */
+.webcam-canvas {
+  display: none;
+}

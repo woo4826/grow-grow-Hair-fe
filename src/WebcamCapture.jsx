@@ -1,18 +1,20 @@
 import React, { useRef, useState } from 'react';
-import { saveAs } from 'file-saver';
+import { useNavigate } from 'react-router-dom';
+import './WebcamCapture.css';
 
 const WebcamCapture = () => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const [isStreaming, setIsStreaming] = useState(false);
   const [image, setImage] = useState(null);
+  const navigate = useNavigate();
 
   const startCamera = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video: true });
       videoRef.current.srcObject = stream;
       videoRef.current.play();
-      setIsStreaming(true);
+      setIsStreaming(true);  // Start showing the grid
     } catch (err) {
       console.error('Error accessing webcam:', err);
     }
@@ -24,7 +26,7 @@ const WebcamCapture = () => {
       const tracks = stream.getTracks();
       tracks.forEach(track => track.stop());
     }
-    setIsStreaming(false);
+    setIsStreaming(false);  // Hide the grid when the camera stops
   };
 
   const captureImage = () => {
@@ -42,14 +44,37 @@ const WebcamCapture = () => {
     });
   };
 
+  const goToNextStage = () => {
+    navigate('/game');
+  };
+
   return (
-    <div>
-      <video ref={videoRef} style={{ width: '100%' }}></video>
-      <canvas ref={canvasRef} style={{ display: 'none' }}></canvas>
-      {!isStreaming && !image && <button onClick={startCamera}>Start Camera</button>}
-      {isStreaming && <button onClick={captureImage}>Capture Image</button>}
-      {image && <button onClick={() => setImage(null)}>Retake Photo</button>}
-      {image && <img src={image} alt="Captured" />}
+    <div className="webcam-container">
+      {!image && (
+        <>
+          <div className="video-wrapper">
+            <video ref={videoRef} className="webcam-video" autoPlay playsInline></video>
+            <div className={`grid-overlay ${isStreaming ? '' : 'hidden'}`}>
+              <div className="horizontal-line-1"></div>
+              <div className="horizontal-line-2"></div>
+            </div> {/* Grid overlay */}
+          </div>
+          <div className="centered-buttons">
+            {!isStreaming && <button className="webcam-button" onClick={startCamera}>Start Camera</button>}
+            {isStreaming && <button className="webcam-button" onClick={captureImage}>Capture Image</button>}
+          </div>
+        </>
+      )}
+      {image && (
+        <>
+          <img src={image} alt="Captured" className="captured-image" />
+          <div className="centered-buttons">
+            <button className="webcam-button" onClick={() => setImage(null)}>Retake Photo</button>
+            <button className="next-button" onClick={goToNextStage}>Next</button>
+          </div>
+        </>
+      )}
+      <canvas ref={canvasRef} className="webcam-canvas"></canvas>
     </div>
   );
 };
