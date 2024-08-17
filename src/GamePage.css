@@ -16,14 +16,14 @@
     justify-content: center;
     height: 100vh;
     background-color: #f0f8ff;
-    padding: 10px;
+    padding: 5px;
     padding-top: 0px;
 }
   
 .game-name {
     display: flex;
     font-size: 24px;
-    margin-bottom: 20px; /* Adds space between game-name and game-container */
+    margin-bottom: 16px; /* Adds space between game-name and game-container */
     text-align: center;
     color: black;
     padding-top: 30px;
@@ -32,17 +32,17 @@
   
 .game-canvas {
     border: 2px solid #000;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     background-color: white;
 }
   
 .button-container {
     display: flex;
-    gap: 20px;
+    gap: 70px;
 }
   
 .game-button {
-    padding: 10px 20px;
+    padding-bottom: 5px;
     font-size: 18px;
     cursor: pointer;
     background-color: #007bff;
@@ -72,5 +72,17 @@ body.water-cursor {
 body.fertilizer-cursor {
     cursor: url('src/assets/cursor/fertilizer.png'), auto;
 }
-  
+
+.finish-button {
+    background-color: #4caf50; /* Green background */
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+}
   

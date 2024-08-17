@@ -5,6 +5,9 @@ import grassCursor from './assets/cursor/grass.png';
 import waterCursor from './assets/cursor/water.png';
 import fertilizerCursor from './assets/cursor/fertilizer.png';
 import defaultCursor from './assets/cursor/default.png';
+import axios from 'axios'; // Import Axios
+
+import { useLocation, useNavigate } from 'react-router-dom';
 
 
 // Import all grass images dynamically using import.meta.glob
@@ -22,6 +25,9 @@ const GamePage = () => {
   const [loadedGrassImages, setLoadedGrassImages] = useState([]);
   const [initialGrassImages, setInitialGrassImages] = useState([]);
   const [cursorStyle, setCursorStyle] = useState('url(./assets/cursor/grass.png), auto');
+  const location = useLocation(); // Use useLocation hook to access location state
+  const navigate = useNavigate();
+  const userId = location.state.userId; // Get userId from location state
 
 
   useEffect(() => {
@@ -40,6 +46,11 @@ const GamePage = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.drawImage(baseImg, 0, 0, canvas.width, canvas.height);
     };
+
+    if (userId === undefined) {
+      alert('Please go back to the main screen and take screenshot!');
+      navigate('/screenshots');
+    }
   }, []);
 
   const handleCanvasClick = (event) => {
@@ -144,6 +155,48 @@ const GamePage = () => {
     setSelectedTool(tool);
   };
 
+  const handleFinish = () => {
+    const canvas = canvasRef.current;
+    const dataURL = canvas.toDataURL('image/png'); // Convert canvas to base64 image URL
+
+    const payload = {
+      user_id: userId,
+      game_image: String(dataURL),
+    };
+
+    console.log('Payload:', payload);
+
+    axios.post('https://4599-218-146-20-61.ngrok-free.app/finish_game', payload, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          console.log('Game image successfully sent to the server');
+
+          const data = response.data;
+          console.log('Response:', data);
+  
+          const link = document.createElement('a');
+          link.href = data.final_image;
+          link.download = 'GrowGrowGrass.png'; // Filename for the downloaded image
+          link.click();
+
+          alert('Game image successfully sent to the server');
+          navigate('/finish');
+        } else {
+          console.error('Failed to upload game image');
+          alert('Failed to upload game image');
+        }
+      })
+      .catch((error) => {
+        console.error('Error uploading game image:', error);
+        alert('Error uploading game image');
+      });
+    
+  };
+
   return (
     <div className="wrapper" style={{ cursor: cursorStyle }}>
       <div className="game-name">
@@ -176,8 +229,15 @@ const GamePage = () => {
           >
             Fertilizer
           </button>
+          <button
+            className="finish-button"
+            onClick={handleFinish}
+          >
+            Finish
+          </button>
         </div>
       </div>
+      
     </div>
   );
 };

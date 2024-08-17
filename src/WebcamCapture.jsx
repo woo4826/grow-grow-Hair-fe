@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios'; // Import Axios
 import './WebcamCapture.css';
 
 const WebcamCapture = () => {
@@ -7,6 +8,7 @@ const WebcamCapture = () => {
   const canvasRef = useRef(null);
   const [isStreaming, setIsStreaming] = useState(false);
   const [image, setImage] = useState(null);
+  const [imageBase64, setImageBase64] = useState(null); // Store base64 string
   const navigate = useNavigate();
 
   const startCamera = async () => {
@@ -35,6 +37,11 @@ const WebcamCapture = () => {
     canvasRef.current.height = videoRef.current.videoHeight;
     context.drawImage(videoRef.current, 0, 0, canvasRef.current.width, canvasRef.current.height);
 
+    // Convert canvas content to base64 string
+    const base64Image = canvasRef.current.toDataURL('image/png');
+    setImageBase64(base64Image); // Store the base64 string
+
+    // Optionally, create a blob for preview
     canvasRef.current.toBlob((blob) => {
       if (blob) {
         const url = URL.createObjectURL(blob);
@@ -44,8 +51,39 @@ const WebcamCapture = () => {
     });
   };
 
-  const goToNextStage = () => {
-    navigate('/game');
+  const goToNextStage = async () => {
+    // Prepare the payload with the base64 image string
+    const payload = {
+      image: String(imageBase64),
+    };
+
+    console.log('Payload:', payload);
+
+    try {
+      // Send POST request to the backend server using Axios
+      const response = await axios.post('https://4599-218-146-20-61.ngrok-free.app/start_game', payload, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      
+      const data = response.data;
+      console.log('Response:', data);
+      const userId = data.user_id;
+      console.log('userId:', userId);
+
+      if (response.status === 200) {
+        console.log('Image successfully sent to the server');
+
+        // Navigate to the /game page with state
+        navigate('/game', { state: { userId: `${userId}` } });
+      } else {
+        console.error('Failed to upload image');
+      }
+    } catch (error) {
+      console.error('Error uploading image:', error);
+    }
   };
 
   return (
