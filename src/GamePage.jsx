@@ -24,9 +24,6 @@ const GamePage = () => {
       setInitialGrassImages(getInitialGrassImages(images));
     });
 
-    console.log(loadedGrassImages);
-    console.log(initialGrassImages);
-
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
     const baseImg = new Image();
@@ -65,15 +62,14 @@ const GamePage = () => {
           let newState = grass.state;
           let newImg = grass.img;
           let newSize = grass.ySize;
-          let newImgIndex = grass.imgIndex;
           
           newSize += 10;
           if ( newState < 5) {
             newState += 1;
-            newImg = loadedGrassImages.find(img => img.includes(`${newImgIndex}-${newState}`));
+            newImg = `/src/assets/grass/${grass.imgIndex}-${newState}.png`;
           }
 
-          return { x: grass.x, y: grass.y, xSize: grass.xSize, ySize: newSize, img: newImg, state: newState, imgIndex: newImgIndex };
+          return { x: grass.x, y: grass.y, xSize: grass.xSize, ySize: newSize, img: newImg, state: newState, imgIndex: grass.imgIndex };
         }
         return grass;
       });
@@ -120,6 +116,9 @@ const GamePage = () => {
   };
 
   const handleToolSelect = (tool) => {
+    console.log(loadedGrassImages);
+    console.log(initialGrassImages);
+
     setSelectedTool(tool);
     document.body.className = `${tool}-cursor`;
   };
