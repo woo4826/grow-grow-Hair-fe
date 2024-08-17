@@ -1,5 +1,6 @@
 .wrapper {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100vh;
@@ -15,12 +16,24 @@
     justify-content: center;
     height: 100vh;
     background-color: #f0f8ff;
-    padding: 20px;
+    padding: 10px;
+    padding-top: 0px;
 }
+  
+.game-name {
+    display: flex;
+    font-size: 24px;
+    margin-bottom: 20px; /* Adds space between game-name and game-container */
+    text-align: center;
+    color: black;
+    padding-top: 30px;
+}
+  
   
 .game-canvas {
     border: 2px solid #000;
     margin-bottom: 20px;
+    background-color: white;
 }
   
 .button-container {

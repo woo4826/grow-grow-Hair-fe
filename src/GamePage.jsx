@@ -65,7 +65,7 @@ const GamePage = () => {
       };
     } else if (selectedTool === 'water') {
       const updatedGrasses = grasses.map((grass) => {
-        if (Math.random() < 1 - 0.2 * grass.state) { // Random probability for the water effect
+        if (Math.random() < 1 - 0.2 * grass.state && Math.abs(grass.x - x) < 50 && Math.abs(grass.y - y) < 150) { // Random probability for the water effect
           let newState = grass.state;
           let newImg = grass.img;
           let newSize = grass.ySize;
@@ -146,35 +146,38 @@ const GamePage = () => {
 
   return (
     <div className="wrapper" style={{ cursor: cursorStyle }}>
-    <div className="game-container">
-      <canvas
-        ref={canvasRef}
-        width={600}
-        height={600}
-        className="game-canvas"
-        onClick={handleCanvasClick}
-      ></canvas>
-      <div className="button-container">
-        <button
-          className={`game-button ${selectedTool === 'grass' ? 'selected' : ''}`}
-          onClick={() => handleToolSelect('grass')}
-        >
-          Grass
-        </button>
-        <button
-          className={`game-button ${selectedTool === 'water' ? 'selected' : ''}`}
-          onClick={() => handleToolSelect('water')}
-        >
-          Water
-        </button>
-        <button
-          className={`game-button ${selectedTool === 'fertilizer' ? 'selected' : ''}`}
-          onClick={() => handleToolSelect('fertilizer')}
-        >
-          Fertilizer
-        </button>
+      <div className="game-name">
+        자라나라 잔디 잔디~
       </div>
-    </div>
+      <div className="game-container">
+        <canvas
+          ref={canvasRef}
+          width={700}
+          height={700}
+          className="game-canvas"
+          onClick={handleCanvasClick}
+        ></canvas>
+        <div className="button-container">
+          <button
+            className={`game-button ${selectedTool === 'grass' ? 'selected' : ''}`}
+            onClick={() => handleToolSelect('grass')}
+          >
+            Grass
+          </button>
+          <button
+            className={`game-button ${selectedTool === 'water' ? 'selected' : ''}`}
+            onClick={() => handleToolSelect('water')}
+          >
+            Water
+          </button>
+          <button
+            className={`game-button ${selectedTool === 'fertilizer' ? 'selected' : ''}`}
+            onClick={() => handleToolSelect('fertilizer')}
+          >
+            Fertilizer
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
