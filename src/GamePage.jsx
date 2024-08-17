@@ -155,7 +155,7 @@ const GamePage = () => {
     setSelectedTool(tool);
   };
 
-  const handleFinish = () => {
+  const handleFinish = async () => {
     const canvas = canvasRef.current;
     const dataURL = canvas.toDataURL('image/png'); // Convert canvas to base64 image URL
 
@@ -163,38 +163,35 @@ const GamePage = () => {
       user_id: userId,
       game_image: String(dataURL),
     };
-
     console.log('Payload:', payload);
 
-    axios.post('https://4599-218-146-20-61.ngrok-free.app/finish_game', payload, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => {
-        if (response.status === 200) {
-          console.log('Game image successfully sent to the server');
-
-          const data = response.data;
-          console.log('Response:', data);
-  
-          const link = document.createElement('a');
-          link.href = data.final_image;
-          link.download = 'GrowGrowGrass.png'; // Filename for the downloaded image
-          link.click();
-
-          alert('Game image successfully sent to the server');
-          navigate('/finish');
-        } else {
-          console.error('Failed to upload game image');
-          alert('Failed to upload game image');
-        }
-      })
-      .catch((error) => {
-        console.error('Error uploading game image:', error);
-        alert('Error uploading game image');
+    try {
+      // Send POST request to the backend server using Axios
+      const response = await axios.post('https://curious-adequately-sunbird.ngrok-free.app/finish_game', payload, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
-    
+
+      
+      const data = response.data;
+      console.log('Response:', data);
+
+      if (response.status === 200) {
+        console.log('Image successfully sent to the server');
+        const link = document.createElement('a');
+        link.href = 'data:image/png;base64,' + String(data.final_image);
+        link.download = 'GrowGrowGrass.png'; // Filename for the downloaded image
+        link.click();
+
+        alert('Game image successfully sent to the server');
+        navigate('/finish');
+      } else {
+        console.error('Failed to upload image');
+      }
+    } catch (error) {
+      console.error('Error uploading image:', error);
+    }
   };
 
   return (
