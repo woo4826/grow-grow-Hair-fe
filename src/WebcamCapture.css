@@ -1,4 +1,3 @@
-/* Container for the webcam capture component */
 .webcam-container {
   display: flex;
   flex-direction: column;
@@ -6,13 +5,27 @@
   justify-content: center;
   height: 100vh;
   width: 100vw;
-  background-color: #f0f8ff;
+  background: linear-gradient(270deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #8b00ff);
+  background-size: 1400% 1400%; /* 배경의 크기를 크게 설정하여 애니메이션 시 자연스럽게 움직이도록 설정 */
+  animation: rainbowBackground 10s ease infinite; /* 무지개 배경 애니메이션 */
   margin: 0;
   overflow: hidden;
   position: relative;
 }
 
-/* Wrapper for video to allow positioning of grid overlay */
+/* 무지개 배경 애니메이션 */
+@keyframes rainbowBackground {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
 .video-wrapper {
   position: relative;
   width: auto;
@@ -21,81 +34,91 @@
   max-height: 100%;
 }
 
-/* Styling for the video element */
 .webcam-video {
   width: 100%;
   height: auto;
   object-fit: cover;
 }
 
-/* Grid overlay */
-.grid-overlay {
+/* 회전하는 이미지 */
+.rotating-image {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none; /* Allow clicks to pass through */
+  width: 200px; /* 이미지 크기를 키움 */
+  animation: rotateImage 0.5s linear infinite; /* 빠르게 회전하는 애니메이션 */
 }
 
-/* Hide grid by default */
-.hidden {
-  display: none;
+.rotating-image.left {
+  left: -220px; /* 좌측에 배치, 크기 조정에 따라 위치 변경 */
+  top: 50%;
+  transform: translateY(-50%);
 }
 
-/* Vertical lines */
-.grid-overlay::before,
-.grid-overlay::after {
-  content: '';
+.rotating-image.right {
+  right: -220px; /* 우측에 배치, 크기 조정에 따라 위치 변경 */
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* 회전 애니메이션 */
+@keyframes rotateImage {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 튕겨다니는 GIF 이미지 */
+.octopus-gif {
   position: absolute;
-  top: 0;
-  width: 2px;
-  height: 100%;
-  border-left: 2px dotted red;
+  width: 150px; /* 크기를 1.5배로 키움 */
+  animation: bounceAround 8s infinite linear; /* 애니메이션 속도를 느리게 설정 */
 }
 
-.grid-overlay::before {
-  left: 33.33%; /* First vertical line */
+/* 튕겨다니는 애니메이션 */
+@keyframes bounceAround {
+  0% {
+    top: 0;
+    left: 0;
+    transform: translate(0, 0);
+  }
+  25% {
+    top: 0;
+    left: 100%;
+    transform: translate(-100%, 0);
+  }
+  50% {
+    top: 100%;
+    left: 100%;
+    transform: translate(-100%, -100%);
+  }
+  75% {
+    top: 100%;
+    left: 0;
+    transform: translate(0, -100%);
+  }
+  100% {
+    top: 0;
+    left: 0;
+    transform: translate(0, 0);
+  }
 }
 
-.grid-overlay::after {
-  left: 66.66%; /* Second vertical line */
-}
-
-/* Horizontal lines */
-.grid-overlay > .horizontal-line-1,
-.grid-overlay > .horizontal-line-2 {
-  position: absolute;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  border-top: 2px dotted red;
-}
-
-.grid-overlay > .horizontal-line-1 {
-  top: 33.33%; /* First horizontal line */
-}
-
-.grid-overlay > .horizontal-line-2 {
-  top: 66.66%; /* Second horizontal line */
-}
-
-/* Styling for the captured image */
+/* 기타 요소 스타일 */
 .captured-image {
   max-width: 100%;
   max-height: 100%;
 }
 
-/* Container for centered buttons */
 .centered-buttons {
   display: flex;
   justify-content: center;
   align-items: center;
   margin-top: 20px;
-  gap: 20px; /* Adds space between buttons */
+  gap: 20px;
 }
 
-/* Styling for the buttons */
 .webcam-button,
 .next-button {
   padding: 10px 20px;
@@ -120,7 +143,6 @@
   background-color: #218838;
 }
 
-/* Canvas element is hidden */
 .webcam-canvas {
   display: none;
 }
