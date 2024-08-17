@@ -143,8 +143,8 @@ const GamePage = () => {
       const newGrassImg = new Image();
       newGrassImg.src = `src/assets/grass/clover.png`;
       newGrassImg.onload = () => {
-        ctx.drawImage(newGrassImg, 300, 150, 200, 200);
-        setGrasses([...grasses, { x: 300, y: 150, xSize: 200, ySize: 200, img: newGrassImg.src, state: 7, imgIndex: 0 }]);
+        ctx.drawImage(newGrassImg, 300, 50, 200, 200);
+        setGrasses([...grasses, { x: 300, y: 50, xSize: 200, ySize: 200, img: newGrassImg.src, state: 7, imgIndex: 0 }]);
       };
       setSelectedTool('default');
       setCursorStyle(`url(${defaultCursor}), auto`);
@@ -152,8 +152,8 @@ const GamePage = () => {
       const newGrassImg = new Image();
       newGrassImg.src = `src/assets/grass/rose.png`;
       newGrassImg.onload = () => {
-        ctx.drawImage(newGrassImg, 300, 150, 200, 200);
-        setGrasses([...grasses, { x: 300, y: 150, xSize: 200, ySize: 200, img: newGrassImg.src, state: 7, imgIndex: 0 }]);
+        ctx.drawImage(newGrassImg, 300, 50, 200, 200);
+        setGrasses([...grasses, { x: 300, y: 50, xSize: 200, ySize: 200, img: newGrassImg.src, state: 7, imgIndex: 0 }]);
       };
       setSelectedTool('default');
       setCursorStyle(`url(${defaultCursor}), auto`);
