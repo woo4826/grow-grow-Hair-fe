@@ -7,4 +7,14 @@
     width: 100vw;
     background-color: #f0f8ff;
     position: relative;
+    color: black;
+}
+
+.game-name {
+    display: flex;
+    font-size: 24px;
+    margin-bottom: 16px; /* Adds space between game-name and game-container */
+    text-align: center;
+    color: black;
+    padding-top: 30px;
 }

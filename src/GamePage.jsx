@@ -113,7 +113,7 @@ const GamePage = () => {
     } else if (selectedTool === 'fertilizer') {
       const newGrasses = grasses.reduce((acc, grass) => {
         acc.push(grass);
-        if (Math.random() < 1 - 0.2 * grass.state) {
+        if (Math.random() < 1 - 0.2 * grass.state && Math.abs(grass.x - x) < 50 && Math.abs(grass.y - y) < 150) {
           const newX = grass.x + Math.random() * 20 - 10;
           const newY = grass.y + Math.random() * 20 - 10;
           const newXSize = grass.xSize;
@@ -185,7 +185,7 @@ const GamePage = () => {
         link.click();
 
         alert('Game image successfully sent to the server');
-        navigate('/finish');
+        navigate('/finish' , { state: { finalImage: `${link.href}` } });
       } else {
         console.error('Failed to upload image');
       }
