@@ -1,6 +1,11 @@
 import React, { useRef, useState, useEffect } from 'react';
 import './GamePage.css';
 import baseImage from './assets/base.png';
+import grassCursor from './assets/cursor/grass.png';
+import waterCursor from './assets/cursor/water.png';
+import fertilizerCursor from './assets/cursor/fertilizer.png';
+import defaultCursor from './assets/cursor/grass.png';
+
 
 // Import all grass images dynamically using import.meta.glob
 const importAllGrassImages = import.meta.glob('./assets/grass/*.png');
@@ -16,6 +21,8 @@ const GamePage = () => {
   const [grasses, setGrasses] = useState([]);
   const [loadedGrassImages, setLoadedGrassImages] = useState([]);
   const [initialGrassImages, setInitialGrassImages] = useState([]);
+  const [cursorStyle, setCursorStyle] = useState('url(./assets/cursor/grass.png), auto');
+
 
   useEffect(() => {
     // Load all grass images
@@ -117,15 +124,28 @@ const GamePage = () => {
   };
 
   const handleToolSelect = (tool) => {
-    // console.log(loadedGrassImages);
-    // console.log(initialGrassImages);
+    let newCursorStyle = `url(${defaultCursor}), auto`; // Default cursor
 
+    switch (tool) {
+      case 'grass':
+        newCursorStyle = `url(${grassCursor}), auto`;
+        break;
+      case 'water':
+        newCursorStyle = `url(${waterCursor}), auto`;
+        break;
+      case 'fertilizer':
+        newCursorStyle = `url(${fertilizerCursor}), auto`;
+        break;
+      default:
+        newCursorStyle = `url(${defaultCursor}), auto`;
+    }
+
+    setCursorStyle(newCursorStyle);
     setSelectedTool(tool);
-    //TODO
   };
 
   return (
-    <div className="wrapper">
+    <div className="wrapper" style={{ cursor: cursorStyle }}>
     <div className="game-container">
       <canvas
         ref={canvasRef}
