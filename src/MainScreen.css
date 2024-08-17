@@ -1,6 +1,3 @@
-/* Importing a fun font from Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@700&display=swap');
-
 .main-screen {
     display: flex;
     flex-direction: column;
@@ -8,52 +5,87 @@
     justify-content: center;
     height: 100vh;
     width: 100vw;
-    background: linear-gradient(135deg, #f0f8ff, #ffebcd);
+    background: linear-gradient(135deg, #ff69b4, #ffff66);
     margin: 0;
     overflow: hidden;
     text-align: center;
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    position: relative; /* 절대 위치를 적용할 수 있도록 설정 */
 }
 
 .title {
-    font-size: 60px;
-    color: #ff6347;
-    text-shadow: 3px 3px 0 #ffebcd, -1px -1px 0 #ff6347;
-    margin-bottom: 20px;
-    animation: bounce 1s infinite;
+    font-size: 80px;
+    color: #ff4500;
+    text-shadow: 4px 4px 0 #ffff66, -2px -2px 0 #ff4500;
+    margin-bottom: 10px;
+    animation: wiggle 0.2s infinite;
 }
 
 .sub-title {
-    font-size: 28px;
-    color: #4682b4;
-    margin-bottom: 30px;
+    font-size: 36px;
+    color: #0000ff;
+    margin-bottom: 10px;
     font-weight: bold;
-    text-shadow: 2px 2px 0 #ffebcd;
-}
-
-.game-image {
-    width: 300px;
-    border-radius: 15px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    /* animation: spin 20s linear infinite; */
+    text-shadow: 3px 3px 0 #ffff66;
+    animation: shake 0.5s infinite;
 }
 
 .main-button {
-    background-color: #32cd32;
-    border: none;
-    border-radius: 12px;
-    padding: 15px 30px;
-    margin-top: 40px;
-    font-size: 20px;
+    background-color: #ff0000;
+    border: 3px solid #ffff00;
+    border-radius: 20px;
+    padding: 20px 40px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-size: 24px;
     color: white;
     cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.1s;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    animation: spin 1s linear infinite;
 }
 
 .main-button:hover {
-    background-color: #228b22;
-    transform: scale(1.1);
+    transform: scale(1.3) rotate(10deg);
+}
+
+.game-image.center {
+    width: 250px;
+    border-radius: 25px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    margin-bottom: 20px;
+    transform: rotate(-10deg);
+    animation: bounce 1s infinite;
+}
+
+.game-image.right {
+    width: 250px;
+    border-radius: 25px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transform: rotate(10deg);
+    animation: wiggle 1s infinite;
+}
+
+.game-image.moving {
+    position: absolute;
+    width: 200px; /* 크기를 키움 */
+    top: 0;
+    left: 0;
+    animation: moveRandomly 10s infinite;
+}
+
+.game-image.roaming {
+    position: absolute;
+    width: 300px; /* 크기를 키움 */
+    animation: roamAndGrow 15s infinite;
+}
+
+.crazy-text {
+    font-size: 28px;
+    color: #ff1493;
+    margin-top: 20px;
+    text-shadow: 2px 2px 0 #ffff00;
+    animation: shake 0.3s infinite;
 }
 
 @keyframes bounce {
@@ -61,14 +93,90 @@
         transform: translateY(0);
     }
     40% {
-        transform: translateY(-30px);
+        transform: translateY(-50px);
     }
     60% {
-        transform: translateY(-15px);
+        transform: translateY(-30px);
+    }
+}
+
+@keyframes wiggle {
+    0%, 100% {
+        transform: rotate(-5deg);
+    }
+    50% {
+        transform: rotate(5deg);
+    }
+}
+
+@keyframes shake {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(-10px);
+    }
+    75% {
+        transform: translateX(10px);
     }
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes moveRandomly {
+    0% {
+        top: 0;
+        left: 0;
+    }
+    25% {
+        top: 50%;
+        left: 25%;
+    }
+    50% {
+        top: 75%;
+        left: 50%;
+    }
+    75% {
+        top: 25%;
+        left: 75%;
+    }
+    100% {
+        top: 0;
+        left: 100%;
+    }
+}
+
+@keyframes roamAndGrow {
+    0% {
+        top: 10%;
+        left: 10%;
+        transform: scale(1) rotate(0deg);
+    }
+    25% {
+        top: 30%;
+        left: 70%;
+        transform: scale(1.5) rotate(45deg);
+    }
+    50% {
+        top: 70%;
+        left: 50%;
+        transform: scale(1) rotate(90deg);
+    }
+    75% {
+        top: 50%;
+        left: 20%;
+        transform: scale(1.5) rotate(135deg);
+    }
+    100% {
+        top: 10%;
+        left: 10%;
+        transform: scale(1) rotate(180deg);
+    }
 }
