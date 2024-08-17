@@ -102,7 +102,7 @@ const GamePage = () => {
 
       // Clear and redraw base image and updated grasses
       const baseImg = new Image();
-      baseImg.src = baseImage;
+      baseImg.src = 'data:image/png;base64,' + baseImage;
       baseImg.onload = () => {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(baseImg, 0, 0, canvas.width, canvas.height);

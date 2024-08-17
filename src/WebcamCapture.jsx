@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios'; // Import Axios
 import './WebcamCapture.css';
 
 const WebcamCapture = () => {
@@ -7,6 +8,7 @@ const WebcamCapture = () => {
   const canvasRef = useRef(null);
   const [isStreaming, setIsStreaming] = useState(false);
   const [image, setImage] = useState(null);
+  const [imageBase64, setImageBase64] = useState(null); // Store base64 string
   const navigate = useNavigate();
 
   const startCamera = async () => {
@@ -30,18 +32,31 @@ const WebcamCapture = () => {
   };
 
   const captureImage = () => {
-    const context = canvasRef.current.getContext('2d');
-    canvasRef.current.width = videoRef.current.videoWidth;
-    canvasRef.current.height = videoRef.current.videoHeight;
-    context.drawImage(videoRef.current, 0, 0, canvasRef.current.width, canvasRef.current.height);
+    const video = videoRef.current;
+    const canvas = canvasRef.current;
+    const context = canvas.getContext('2d');
 
-    canvasRef.current.toBlob((blob) => {
+    // Ensure canvas dimensions match video dimensions
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    // Draw video frame to canvas
+    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    // Convert canvas content to base64 string
+    const base64Image = canvas.toDataURL('image/png');
+    setImageBase64(base64Image); // Store the base64 string
+
+    // Create a Blob for the captured image
+    canvas.toBlob((blob) => {
       if (blob) {
         const url = URL.createObjectURL(blob);
         setImage(url);
-        stopCamera();
+        stopCamera(); // Stop the camera after capturing
+      } else {
+        console.error('Failed to create Blob from canvas');
       }
-    });
+    }, 'image/png');
   };
 
   const goToNextStage = async () => {
@@ -107,14 +122,10 @@ const WebcamCapture = () => {
         <>
           <div className="video-wrapper">
             <video ref={videoRef} className="webcam-video" autoPlay playsInline></video>
-            {/* 회전하는 이미지 추가 */}
-            {isStreaming && (
-              <>
-                <img src="src/assets/growgrow_3.png" alt="grass 3" className="rotating-image left" />
-                <img src="src/assets/growgrow_4.png" alt="grass 4" className="rotating-image right" />
-                <img src="src/assets/octopus-dance.gif" alt="octopus" className="octopus-gif" />
-              </>
-            )}
+            <div className={`grid-overlay ${isStreaming ? '' : 'hidden'}`}>
+              <div className="horizontal-line-1"></div>
+              <div className="horizontal-line-2"></div>
+            </div> {/* Grid overlay */}
           </div>
           <div className="centered-buttons">
             {!isStreaming && <button className="webcam-button" onClick={startCamera}>Start Camera</button>}
@@ -131,7 +142,7 @@ const WebcamCapture = () => {
           </div>
         </>
       )}
-      <canvas ref={canvasRef} className="webcam-canvas"></canvas>
+      <canvas ref={canvasRef} className="webcam-canvas" style={{ display: 'none' }}></canvas>
     </div>
   );
 };
