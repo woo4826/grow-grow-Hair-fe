@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import './GamePage.css';
-import baseImage from './assets/base.png';
+// import baseImage from './assets/base.png';
 import grassCursor from './assets/cursor/grass.png';
 import waterCursor from './assets/cursor/water.png';
 import fertilizerCursor from './assets/cursor/fertilizer.png';
@@ -28,6 +28,7 @@ const GamePage = () => {
   const location = useLocation(); // Use useLocation hook to access location state
   const navigate = useNavigate();
   const userId = location.state.userId; // Get userId from location state
+  const baseImage = location.state.baseImage;
 
 
   useEffect(() => {
@@ -40,7 +41,7 @@ const GamePage = () => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
     const baseImg = new Image();
-    baseImg.src = baseImage;
+    baseImg.src =  'data:image/png;base64,' + baseImage;// todo
 
     baseImg.onload = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -78,12 +79,12 @@ const GamePage = () => {
       grassImg.src = initialGrassImages[randomGrassIndex];
 
       grassImg.onload = () => {
-        ctx.drawImage(grassImg, x - 30, y - 80, 70, 100); // Default size
-        setGrasses([...grasses, { x: x - 30, y: y - 80, xSize: 70, ySize: 100, img: grassImg.src, state: 1, imgIndex: randomGrassIndex }]);
+        ctx.drawImage(grassImg, x - 15, y - 80, 30, 100); // Default size
+        setGrasses([...grasses, { x: x - 15, y: y - 80, xSize: 30, ySize: 100, img: grassImg.src, state: 1, imgIndex: randomGrassIndex }]);
       };
     } else if (selectedTool === 'water') {
       const updatedGrasses = grasses.map((grass) => {
-        if (Math.random() < 1 - 0.2 * grass.state && Math.abs(grass.x - x) < 50 && Math.abs(grass.y - y) < 150) { // Random probability for the water effect
+        if (Math.random() < 1 - 0.2 * grass.state && Math.abs(grass.x - x) < 50 && Math.abs(grass.y - y) < 300) { // Random probability for the water effect
           let newState = grass.state;
           let newImg = grass.img;
           let newSize = grass.ySize;
@@ -142,18 +143,20 @@ const GamePage = () => {
       const newGrassImg = new Image();
       newGrassImg.src = `src/assets/grass/clover.png`;
       newGrassImg.onload = () => {
-        ctx.drawImage(newGrassImg, 300, 400, 200, 200);
-        setGrasses([...grasses, { x: 300, y: 400, xSize: 200, ySize: 200, img: newGrassImg.src, state: 7, imgIndex: 0 }]);
+        ctx.drawImage(newGrassImg, 300, 150, 200, 200);
+        setGrasses([...grasses, { x: 300, y: 150, xSize: 200, ySize: 200, img: newGrassImg.src, state: 7, imgIndex: 0 }]);
       };
-      setSelectedTool('grass');
+      setSelectedTool('default');
+      setCursorStyle(`url(${defaultCursor}), auto`);
     } else if (selectedTool === 'special2') {
       const newGrassImg = new Image();
       newGrassImg.src = `src/assets/grass/rose.png`;
       newGrassImg.onload = () => {
-        ctx.drawImage(newGrassImg, 300, 400, 200, 200);
-        setGrasses([...grasses, { x: 300, y: 400, xSize: 200, ySize: 200, img: newGrassImg.src, state: 7, imgIndex: 0 }]);
+        ctx.drawImage(newGrassImg, 300, 150, 200, 200);
+        setGrasses([...grasses, { x: 300, y: 150, xSize: 200, ySize: 200, img: newGrassImg.src, state: 7, imgIndex: 0 }]);
       };
-      setSelectedTool('grass');
+      setSelectedTool('default');
+      setCursorStyle(`url(${defaultCursor}), auto`);
     }
   };
 
@@ -180,41 +183,27 @@ const GamePage = () => {
 
   const handleFinish = async () => {
     const canvas = canvasRef.current;
-    const dataURL = canvas.toDataURL('image/png'); // Convert canvas to base64 image URL
-
-    const payload = {
-      user_id: userId,
-      game_image: String(dataURL),
-    };
-    console.log('Payload:', payload);
 
     try {
-      // Send POST request to the backend server using Axios
-      const response = await axios.post('https://19cd-218-146-20-61.ngrok-free.app/finish_game', payload, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
+      // Convert the canvas to a Data URL (Base64 encoded image)
+      const dataURL = canvas.toDataURL('image/png');
       
-      const data = response.data;
-      // console.log('Response:', data);
+      // Create a temporary link element to trigger a download
+      const link = document.createElement('a');
+      link.href = dataURL;
+      link.download = 'GrowGrowGrass.png'; // Filename for the downloaded image
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
 
-      if (response.status === 200) {
-        console.log('Image successfully sent to the server');
-        const link = document.createElement('a');
-        link.href = 'data:image/png;base64,' + String(data.final_image);
-        link.download = 'GrowGrowGrass.png'; // Filename for the downloaded image
-        link.click();
-
-        alert('Game image successfully sent to the server');
-        navigate('/finish' , { state: { finalImage: `${dataURL}` } });
-      } else {
-        console.error('Failed to upload image');
-      }
+      // Navigate to the FinishPage with the final image data
+      navigate('/finish', { state: { finalImage: dataURL } });
+      
     } catch (error) {
-      console.error('Error uploading image:', error);
+      console.error('Error saving or navigating with canvas image:', error);
+      alert('Something went wrong while saving the image.');
     }
+
   };
 
   return (

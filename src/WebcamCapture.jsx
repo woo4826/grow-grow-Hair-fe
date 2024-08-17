@@ -53,31 +53,31 @@ const WebcamCapture = () => {
         if (upscaledBlob) {
           formData.append('file', upscaledBlob, 'upscaled-image.png');
 
-        try {
-          // Send POST request to the backend server using Axios
-          const response = await axios.post('https://19cd-218-146-20-61.ngrok-free.app/start_game2', formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          });
+          try {
+            // Send POST request to the backend server using Axios
+            const response = await axios.post('https://19cd-218-146-20-61.ngrok-free.app/start_game2', formData, {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+              },
+            });
 
-          const data = response.data;
-          console.log('Response:', data);
-          const userId = data.user_id;
-          console.log('userId:', userId);
+            const data = response.data;
+            console.log('Response:', data);
+            const userId = data.user_id;
+            console.log('userId:', userId);
             const baseImage = data.bald_image;
 
-          if (response.status === 200) {
-            console.log('Image successfully sent to the server');
-            // Navigate to the /game page with state
+            if (response.status === 200) {
+              console.log('Image successfully sent to the server');
+              // Navigate to the /game page with state
               navigate('/game', { state: { userId: `${userId}`, baseImage: `${baseImage}` } });
-          } else {
-            console.error('Failed to upload image');
+            } else {
+              console.error('Failed to upload image');
+            }
+          } catch (error) {
+            console.error('Error uploading image:', error);
           }
-        } catch (error) {
-          console.error('Error uploading image:', error);
-        }
-      } else {
+        } else {
           console.error('Failed to create upscaled Blob');
         }
       });
@@ -97,7 +97,7 @@ const WebcamCapture = () => {
       // Convert the upscaled canvas to Blob
       upscaledCanvas.toBlob((blob) => {
         resolve(blob);
-    }, 'image/png');
+      }, 'image/png');
     });
   };
 
