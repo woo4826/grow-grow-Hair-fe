@@ -90,8 +90,8 @@ const GamePage = () => {
       };
 
       setGrasses(updatedGrasses);
-      console.log('after');
-      console.log(grasses);
+      // console.log('after');
+      // console.log(grasses);
     } else if (selectedTool === 'fertilizer') {
       const newGrasses = grasses.reduce((acc, grass) => {
         acc.push(grass);
@@ -121,10 +121,11 @@ const GamePage = () => {
     // console.log(initialGrassImages);
 
     setSelectedTool(tool);
-    document.body.className = `${tool}-cursor`;
+    //TODO
   };
 
   return (
+    <div className="wrapper">
     <div className="game-container">
       <canvas
         ref={canvasRef}
@@ -153,6 +154,7 @@ const GamePage = () => {
           Fertilizer
         </button>
       </div>
+    </div>
     </div>
   );
 };
