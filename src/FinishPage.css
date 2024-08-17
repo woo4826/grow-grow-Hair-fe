@@ -1,20 +1,28 @@
 .wrapper {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
     height: 100vh;
-    width: 100vw;
-    background-color: #f0f8ff;
-    position: relative;
-    color: black;
+    background-color: #f0f0f0; /* Optional: for better visibility */
 }
 
 .game-name {
-    display: flex;
     font-size: 24px;
-    margin-bottom: 16px; /* Adds space between game-name and game-container */
-    text-align: center;
-    color: black;
-    padding-top: 30px;
+    margin-bottom: 20px;
+}
+
+.image-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.final-image {
+    max-width: 90%;
+    max-height: 90%;
+    border: 1px solid #ddd;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
