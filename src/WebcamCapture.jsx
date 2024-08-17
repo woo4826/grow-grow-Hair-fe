@@ -70,7 +70,7 @@ const WebcamCapture = () => {
 
           try {
             // Send POST request to the backend server using Axios
-            const response = await axios.post('https://19cd-218-146-20-61.ngrok-free.app/start_game2', formData, {
+            const response = await axios.post('https://a0cb-218-146-20-61.ngrok-free.app/start_game2', formData, {
               headers: {
                 'Content-Type': 'multipart/form-data',
               },
