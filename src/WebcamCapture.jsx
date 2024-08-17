@@ -16,7 +16,7 @@ const WebcamCapture = () => {
       const stream = await navigator.mediaDevices.getUserMedia({ video: true });
       videoRef.current.srcObject = stream;
       videoRef.current.play();
-      setIsStreaming(true);  // Start showing the grid
+      setIsStreaming(true);
     } catch (err) {
       console.error('Error accessing webcam:', err);
     }
@@ -28,81 +28,72 @@ const WebcamCapture = () => {
       const tracks = stream.getTracks();
       tracks.forEach(track => track.stop());
     }
-    setIsStreaming(false);  // Hide the grid when the camera stops
+    setIsStreaming(false);
   };
 
-  const resizeImage = (src, width, height) => {
-    return new Promise((resolve) => {
-      const img = new Image();
-      img.src = src;
-      img.onload = () => {
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = width;
-        canvas.height = height;
-        ctx.drawImage(img, 0, 0, width, height);
-        const resizedBase64 = canvas.toDataURL('image/png');
-        resolve(resizedBase64);
-      };
-    });
-  };
+  const captureImage = () => {
+    const video = videoRef.current;
+    const canvas = canvasRef.current;
+    const context = canvas.getContext('2d');
 
-  const captureImage = async () => {
-    const context = canvasRef.current.getContext('2d');
-    canvasRef.current.width = videoRef.current.videoWidth;
-    canvasRef.current.height = videoRef.current.videoHeight;
-    context.drawImage(videoRef.current, 0, 0, canvasRef.current.width, canvasRef.current.height);
+    // Ensure canvas dimensions match video dimensions
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    // Draw video frame to canvas
+    context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
     // Convert canvas content to base64 string
-    const base64Image = canvasRef.current.toDataURL('image/png');
-
-    // const resizedBase64 = await resizeImage(base64Image, 800, 600);
-
+    const base64Image = canvas.toDataURL('image/png');
     setImageBase64(base64Image); // Store the base64 string
 
-    // Optionally, create a blob for preview
-    canvasRef.current.toBlob((blob) => {
+    // Create a Blob for the captured image
+    canvas.toBlob((blob) => {
       if (blob) {
         const url = URL.createObjectURL(blob);
         setImage(url);
         stopCamera(); // Stop the camera after capturing
+      } else {
+        console.error('Failed to create Blob from canvas');
       }
-    });
+    }, 'image/png');
   };
 
   const goToNextStage = async () => {
-    // Prepare the payload with the base64 image string
-    const payload = {
-      image: String(imageBase64),
-    };
+    const formData = new FormData();
 
-    console.log('Payload:', payload);
+    // Convert canvas content to Blob
+    canvasRef.current.toBlob(async (blob) => {
+      if (blob) {
+        formData.append('file', blob, 'captured-image.png');
 
-    try {
-      // Send POST request to the backend server using Axios
-      const response = await axios.post('https://19cd-218-146-20-61.ngrok-free.app/start', payload, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+        try {
+          // Send POST request to the backend server using Axios
+          const response = await axios.post('https://19cd-218-146-20-61.ngrok-free.app/start_game2', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          });
 
-      
-      const data = response.data;
-      console.log('Response:', data);
-      const userId = data.user_id;
-      console.log('userId:', userId);
+          const data = response.data;
+          console.log('Response:', data);
+          const userId = data.user_id;
+          console.log('userId:', userId);
 
-      if (response.status === 200) {
-        console.log('Image successfully sent to the server');
-
-        // Navigate to the /game page with state
-        navigate('/game', { state: { userId: `${userId}` } });
+          if (response.status === 200) {
+            console.log('Image successfully sent to the server');
+            // Navigate to the /game page with state
+            navigate('/game', { state: { userId: `${userId}` } });
+          } else {
+            console.error('Failed to upload image');
+          }
+        } catch (error) {
+          console.error('Error uploading image:', error);
+        }
       } else {
-        console.error('Failed to upload image');
+        console.error('Failed to create Blob for FormData');
       }
-    } catch (error) {
-      console.error('Error uploading image:', error);
-    }
+    }, 'image/png');
   };
 
   return (
@@ -131,7 +122,7 @@ const WebcamCapture = () => {
           </div>
         </>
       )}
-      <canvas ref={canvasRef} className="webcam-canvas"></canvas>
+      <canvas ref={canvasRef} className="webcam-canvas" style={{ display: 'none' }}></canvas>
     </div>
   );
 };

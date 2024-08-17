@@ -56,9 +56,13 @@ const GamePage = () => {
   const handleCanvasClick = (event) => {
     if (!selectedTool || loadedGrassImages.length === 0) return;
 
-    if (Math.random < 0.1) {
+    const sp = Math.random();
+    if (0.05 < sp < 0.1) {
+      setSelectedTool('special2');
+    } else if ( sp < 0.05) {
       setSelectedTool('special');
     }
+
     // console.log('selectedTool:', selectedTool);
     // console.log('grasses:', grasses);
 
@@ -138,9 +142,18 @@ const GamePage = () => {
       const newGrassImg = new Image();
       newGrassImg.src = `src/assets/grass/clover.png`;
       newGrassImg.onload = () => {
-        ctx.drawImage(newGrassImg, 350, 570, 100, 250);
-        setGrasses([...grasses, { x: 350, y: 570, xSize: 100, ySize: 250, img: newGrassImg.src, state: 7, imgIndex: 0 }]);
+        ctx.drawImage(newGrassImg, 300, 400, 200, 200);
+        setGrasses([...grasses, { x: 300, y: 400, xSize: 200, ySize: 200, img: newGrassImg.src, state: 7, imgIndex: 0 }]);
       };
+      setSelectedTool('grass');
+    } else if (selectedTool === 'special2') {
+      const newGrassImg = new Image();
+      newGrassImg.src = `src/assets/grass/rose.png`;
+      newGrassImg.onload = () => {
+        ctx.drawImage(newGrassImg, 300, 400, 200, 200);
+        setGrasses([...grasses, { x: 300, y: 400, xSize: 200, ySize: 200, img: newGrassImg.src, state: 7, imgIndex: 0 }]);
+      };
+      setSelectedTool('grass');
     }
   };
 
