@@ -4,7 +4,7 @@ import baseImage from './assets/base.png';
 import grassCursor from './assets/cursor/grass.png';
 import waterCursor from './assets/cursor/water.png';
 import fertilizerCursor from './assets/cursor/fertilizer.png';
-import defaultCursor from './assets/cursor/grass.png';
+import defaultCursor from './assets/cursor/default.png';
 
 
 // Import all grass images dynamically using import.meta.glob
