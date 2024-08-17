@@ -56,6 +56,9 @@ const GamePage = () => {
   const handleCanvasClick = (event) => {
     if (!selectedTool || loadedGrassImages.length === 0) return;
 
+    if (Math.random < 0.1) {
+      setSelectedTool('special');
+    }
     // console.log('selectedTool:', selectedTool);
     // console.log('grasses:', grasses);
 
@@ -71,8 +74,8 @@ const GamePage = () => {
       grassImg.src = initialGrassImages[randomGrassIndex];
 
       grassImg.onload = () => {
-        ctx.drawImage(grassImg, x - 25, y - 25, 25, 50); // Default size
-        setGrasses([...grasses, { x: x - 25, y: y - 25, xSize: 25, ySize: 50, img: grassImg.src, state: 1, imgIndex: randomGrassIndex }]);
+        ctx.drawImage(grassImg, x - 30, y - 80, 70, 100); // Default size
+        setGrasses([...grasses, { x: x - 30, y: y - 80, xSize: 70, ySize: 100, img: grassImg.src, state: 1, imgIndex: randomGrassIndex }]);
       };
     } else if (selectedTool === 'water') {
       const updatedGrasses = grasses.map((grass) => {
@@ -87,7 +90,7 @@ const GamePage = () => {
             newImg = `/src/assets/grass/${grass.imgIndex}-${newState}.png`;
           }
 
-          return { x: grass.x, y: grass.y, xSize: grass.xSize, ySize: newSize, img: newImg, state: newState, imgIndex: grass.imgIndex };
+          return { x: grass.x, y: grass.y - 10, xSize: grass.xSize, ySize: newSize, img: newImg, state: newState, imgIndex: grass.imgIndex };
         }
         return grass;
       });
@@ -131,6 +134,13 @@ const GamePage = () => {
         return acc;
       }, []);
       setGrasses(newGrasses);
+    } else if (selectedTool === 'special') {
+      const newGrassImg = new Image();
+      newGrassImg.src = `src/assets/grass/clover.png`;
+      newGrassImg.onload = () => {
+        ctx.drawImage(newGrassImg, 350, 570, 100, 250);
+        setGrasses([...grasses, { x: 350, y: 570, xSize: 100, ySize: 250, img: newGrassImg.src, state: 7, imgIndex: 0 }]);
+      };
     }
   };
 
@@ -175,7 +185,7 @@ const GamePage = () => {
 
       
       const data = response.data;
-      console.log('Response:', data);
+      // console.log('Response:', data);
 
       if (response.status === 200) {
         console.log('Image successfully sent to the server');
@@ -185,7 +195,7 @@ const GamePage = () => {
         link.click();
 
         alert('Game image successfully sent to the server');
-        navigate('/finish' , { state: { finalImage: `${link.href}` } });
+        navigate('/finish' , { state: { finalImage: `${dataURL}` } });
       } else {
         console.error('Failed to upload image');
       }

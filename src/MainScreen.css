@@ -9,12 +9,27 @@
     margin: 0;
     overflow: hidden; /* Prevents scrollbars from appearing */
     text-align: center;
-  }
+}
+
+.title {
+    font-size: 50px;
+    margin-bottom: 5px; /* Adds space between title and main-screen */
+    text-align: center;
+    color: black;
+    padding-top: 30px;
+}
+
+.sub-title {
+    font-size: 24px;
+    margin-bottom: 16px; /* Adds space between sub-title and main-screen */
+    text-align: center;
+    color: black;
+}
   
-  button {
+.main-button {
     margin-top: 20px;
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
-  }
+}
   

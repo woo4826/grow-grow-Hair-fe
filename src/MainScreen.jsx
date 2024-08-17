@@ -5,12 +5,12 @@ import './MainScreen.css';
 const MainScreen = () => {
   return (
     <div className="main-screen">
-      <h1>대머리 잔디 키우기 게임</h1>
-        <p>대머리를 키워보세요!</p>
+        <h1 className="title">대머리 잔디 키우기 게임</h1>
+        <p className="sub-title">대머리를 키워보세요!</p>
         <img src="src/assets/growgrow.jpg" alt="grass" />
-      <Link to="/screenshot">
-        <button>Game Start</button>
-      </Link>
+        <Link to="/screenshot">
+            <button className="main-button">Game Start</button>
+        </Link>
     </div>
   );
 };

@@ -31,7 +31,23 @@ const WebcamCapture = () => {
     setIsStreaming(false);  // Hide the grid when the camera stops
   };
 
-  const captureImage = () => {
+  const resizeImage = (src, width, height) => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.src = src;
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = width;
+        canvas.height = height;
+        ctx.drawImage(img, 0, 0, width, height);
+        const resizedBase64 = canvas.toDataURL('image/png');
+        resolve(resizedBase64);
+      };
+    });
+  };
+
+  const captureImage = async () => {
     const context = canvasRef.current.getContext('2d');
     canvasRef.current.width = videoRef.current.videoWidth;
     canvasRef.current.height = videoRef.current.videoHeight;
@@ -39,6 +55,9 @@ const WebcamCapture = () => {
 
     // Convert canvas content to base64 string
     const base64Image = canvasRef.current.toDataURL('image/png');
+
+    // const resizedBase64 = await resizeImage(base64Image, 800, 600);
+
     setImageBase64(base64Image); // Store the base64 string
 
     // Optionally, create a blob for preview
