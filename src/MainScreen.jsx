@@ -5,7 +5,7 @@ import './MainScreen.css';
 const MainScreen = () => {
   return (
     <div className="main-screen">
-      <h1 className="title">💥 대머리 잔디 폭풍 성장 게임 💥</h1>
+      <h1 className="title">💥 쌈뽕한 대머리 잔디 폭풍 성장 게임 💥</h1>
       <p className="sub-title">대머리의 꿈을 이뤄보세요! 🌱</p>
 
       <Link to="/screenshot">
