@@ -38,8 +38,8 @@ const GamePage = () => {
   const handleCanvasClick = (event) => {
     if (!selectedTool || loadedGrassImages.length === 0) return;
 
-    console.log('selectedTool:', selectedTool);
-    console.log('grasses:', grasses);
+    // console.log('selectedTool:', selectedTool);
+    // console.log('grasses:', grasses);
 
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
@@ -53,8 +53,8 @@ const GamePage = () => {
       grassImg.src = initialGrassImages[randomGrassIndex];
 
       grassImg.onload = () => {
-        ctx.drawImage(grassImg, x - 25, y - 25, 50, 50); // Default size
-        setGrasses([...grasses, { x: x - 25, y: y - 25, xSize: 50, ySize: 50, img: grassImg.src, state: 1, imgIndex: randomGrassIndex }]);
+        ctx.drawImage(grassImg, x - 25, y - 25, 25, 50); // Default size
+        setGrasses([...grasses, { x: x - 25, y: y - 25, xSize: 25, ySize: 50, img: grassImg.src, state: 1, imgIndex: randomGrassIndex }]);
       };
     } else if (selectedTool === 'water') {
       const updatedGrasses = grasses.map((grass) => {
@@ -95,19 +95,20 @@ const GamePage = () => {
     } else if (selectedTool === 'fertilizer') {
       const newGrasses = grasses.reduce((acc, grass) => {
         acc.push(grass);
-        if (Math.random() < 0.5) {
+        if (Math.random() < 1 - 0.2 * grass.state) {
           const newX = grass.x + Math.random() * 20 - 10;
           const newY = grass.y + Math.random() * 20 - 10;
-          const newSize = grass.size;
+          const newXSize = grass.xSize;
+          const newYSize = grass.ySize;
           const newImg = grass.img;
 
           const newGrassImg = new Image();
           newGrassImg.src = newImg;
           newGrassImg.onload = () => {
-            ctx.drawImage(newGrassImg, newX, newY, newSize, newSize);
+            ctx.drawImage(newGrassImg, newX, newY, newXSize, newYSize);
           };
 
-          acc.push({ x: newX, y: newY, size: newSize, img: newImg, state: grass.state });
+          acc.push({ x: newX, y: newY, xSize: newXSize, ySize: newYSize, img: newImg, state: grass.state, imgIndex: grass.imgIndex });
         }
         return acc;
       }, []);
@@ -116,8 +117,8 @@ const GamePage = () => {
   };
 
   const handleToolSelect = (tool) => {
-    console.log(loadedGrassImages);
-    console.log(initialGrassImages);
+    // console.log(loadedGrassImages);
+    // console.log(initialGrassImages);
 
     setSelectedTool(tool);
     document.body.className = `${tool}-cursor`;

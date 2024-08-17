@@ -39,15 +39,15 @@
   
 /* Custom cursor styles */
 body.grass-cursor {
-    cursor: url('./assets/cursor/grass.png'), auto;
+    cursor: url('src/assets/cursor/grass.png'), auto;
 }
   
 body.water-cursor {
-    cursor: url('./assets/cursor/water.png'), auto;
+    cursor: url('src/assets/cursor/water.png'), auto;
 }
   
 body.fertilizer-cursor {
-    cursor: url('./assets/cursor/fertilizer.png'), auto;
+    cursor: url('src/assets/cursor/fertilizer.png'), auto;
 }
   
   
