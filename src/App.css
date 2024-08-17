@@ -1,0 +1,21 @@
+.App {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  background-color: #fff; /* Optional: background color for the capture page */
+  text-align: center;
+  margin: 0;
+}
+
+button {
+  margin: 10px;
+}
+
+img {
+  margin-top: 20px;
+  max-width: 100%;
+  height: auto;
+}
