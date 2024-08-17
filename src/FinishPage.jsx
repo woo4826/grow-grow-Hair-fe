@@ -38,7 +38,9 @@ const FinishPage = () => {
                 )}
                 {showFlash && <div className="flash-effect"></div>}
             </div>
-            {showFinish && <div className="finish-text">Finish</div>}
+            {showFinish && <div className="finish-text">
+                    <img src={hanImage} width="3500px" height="3200px"/>
+                </div>}
         </div>
     );
 };
